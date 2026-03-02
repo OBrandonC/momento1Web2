@@ -7,7 +7,7 @@ function App() {
     <div className="layout">
       <Navbar />
       <main>
-        {/* aquí va el contenido central de mis compis */}
+        {/* aquí va el contenido central de mis compis amados*/}
         <p>Contenido principal del sitio</p>
       </main>
       <Footer />
