@@ -343,7 +343,7 @@ Si ves la pantalla de inicio de **Creciendo Juntos**, ¡la instalación fue exit
 | Carolina Martínez Mesa           | [@caromm80](https://github.com/caromm80)                         |
 | Britany Alexandra Montoya Tirado | [@Britany-mon](https://github.com/Britany-mon)                   |
 | Brandon Ciro Ortiz               | [@OBrandonC](https://github.com/OBrandonC)                       |
-| Samuel Hoyos Vanegas             | [@SamuelH1211](https://github.com/SamuelH1211)                    |
+| Samuel Hoyos Vanegas             | [@SamuelH1211](https://github.com/SamuelH1211)                   |
 
 
 *Documentación generada para el proyecto **Creciendo Juntos** — Versión 1.0*  
