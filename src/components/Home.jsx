@@ -1,4 +1,18 @@
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
+
 const Home = () => {
+  const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
+
+  const handleVerCursos = () => {
+    if (isAuthenticated) {
+      navigate('/dashboard');
+    } else {
+      navigate('/login');
+    }
+  };
+
   return (
     <div>
 
@@ -6,7 +20,9 @@ const Home = () => {
       <section className="hero">
         <h1>Bienvenido a <span className="resaltado">Creciendo Juntos</span></h1>
         <p>Cursos para niños, jóvenes, adultos y viejos.<br />Aprende a tu ritmo donde quiera que estés.</p>
-        <a href="#cursos" className="btn-hero">Ver cursos</a>
+        <button onClick={handleVerCursos} className="btn-hero">
+          {isAuthenticated ? 'Ir a mis cursos' : 'Ver cursos'}
+        </button>
       </section>
 
       {/* Catálogo de cursos */}
