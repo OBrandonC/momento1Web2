@@ -1143,3 +1143,32 @@ main {
 .btn-secondary:hover {
   background: var(--purple-light);
 }
+/* Estilo base para los botones de las tarjetas */
+.btn-curso, .btn-curso-danger {
+  border-radius: 20px; /* Esto redondea las esquinas */
+  border: none;        /* Quita el borde sólido que ves en la imagen 2 */
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  font-family: inherit;
+}
+
+/* Estilo para los botones de acción */
+.btn-curso {
+  background-color: #eaddf9; /* Color lila de tu imagen 1 */
+  color: #333;
+}
+
+/* Estilo específico para eliminar (para que mantenga la estética) */
+.btn-curso-danger {
+  background-color: #eaddf9; /* Puedes usar el mismo lila o un rojo suave */
+  color: #333;
+}
+
+/* Asegura que las tarjetas tengan el mismo contenedor */
+.curso-card {
+  border-radius: 15px;
+  padding: 20px;
+  background-color: white;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}

@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
-
+import { AuthContext } from '../context/AuthContext'; // Importar contexto
+import { cursos } from '../data/courses';
 const slides = [
   {
     tag: '🎓 Plataforma educativa',
@@ -20,15 +21,6 @@ const slides = [
   },
 ];
 
-const cursos = [
-  { emoji: '📐', nombre: 'Matemáticas',        desc: 'Aritmética, álgebra y lógica para todos los niveles.',           edad: '6–17 años',        duracion: '8 semanas' },
-  { emoji: '✏️', nombre: 'Lenguaje',            desc: 'Lectoescritura, gramática y comunicación efectiva.',             edad: '6–12 años',        duracion: '6 semanas' },
-  { emoji: '💻', nombre: 'Tecnología',          desc: 'Introducción a la computación y programación básica.',           edad: '10–17 años',       duracion: '10 semanas' },
-  { emoji: '🎨', nombre: 'Arte y Creatividad',  desc: 'Dibujo, música y escritura creativa para expresarte.',           edad: 'Todos los niveles', duracion: '6 semanas' },
-  { emoji: '🌱', nombre: 'Desarrollo Personal', desc: 'Habilidades blandas, liderazgo e inteligencia emocional.',       edad: 'Todos los niveles', duracion: '5 semanas' },
-  { emoji: '🔬', nombre: 'Ciencias',            desc: 'Biología, física y experimentos para mentes curiosas.',          edad: '8–14 años',        duracion: '8 semanas' },
-];
-
 const testimonios = [
   { emoji: '👩', nombre: 'Laura M.', lugar: 'Medellín, Colombia', texto: 'Gracias a los cursos de matemáticas mi hija pasó de temer los números a amarlos. Los profesores son increíbles y el contenido es muy claro.' },
   { emoji: '👨', nombre: 'Carlos R.', lugar: 'Bogotá, Colombia',  texto: 'Tomé el curso de Tecnología y en pocas semanas ya tenía mis primeros proyectos funcionando. Súper recomendado para principiantes.' },
@@ -42,19 +34,32 @@ const pasos = [
   { num: '4', titulo: 'Certifícate',        desc: 'Completa el curso y obtén tu certificado para compartir.' },
 ];
 
+
+
+
 const Home = () => {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
+  const { enrolledCourses, enrollCourse } = useContext(AuthContext); // Consumir contexto
   const [current, setCurrent] = useState(0);
 
   const prev = () => setCurrent(c => (c === 0 ? slides.length - 1 : c - 1));
   const next = () => setCurrent(c => (c === slides.length - 1 ? 0 : c + 1));
 
-  const handleCTA = () => navigate(isAuthenticated ? '/dashboard' : '/login');
+  const handleCTA = () => navigate(isAuthenticated ? '/my-courses' : '/login');
+  
+
+  const handleEnroll = (id) => {
+    if (!isAuthenticated) {
+      navigate('/login');
+    } else {
+      enrollCourse(id);
+    }
+  };
+  
 
   return (
     <div>
-
       {/* ── CARRUSEL ── */}
       <div className="carousel-wrapper">
         <button className="carousel-btn prev" onClick={prev} aria-label="Anterior">&#8249;</button>
@@ -71,33 +76,20 @@ const Home = () => {
         ))}
 
         <button className="carousel-btn next" onClick={next} aria-label="Siguiente">&#8250;</button>
-
-        <div className="carousel-dots">
-          {slides.map((_, i) => (
-            <span key={i} className={`dot ${i === current ? 'active' : ''}`} onClick={() => setCurrent(i)} />
-          ))}
-        </div>
       </div>
-
-      {/* ── STATS ── */}
+        {/* ── STATS ── */}
       <div className="stats-bar">
         <div className="stat-item"><span className="stat-number">+5.000</span><span className="stat-label">Estudiantes activos</span></div>
         <div className="stat-item"><span className="stat-number">6</span><span className="stat-label">Cursos disponibles</span></div>
         <div className="stat-item"><span className="stat-number">100%</span><span className="stat-label">Aprendizaje flexible</span></div>
         <div className="stat-item"><span className="stat-number">Gratis</span><span className="stat-label">Acceso básico sin costo</span></div>
       </div>
-
       {/* ── CURSOS ── */}
       <section className="cursos-section" id="cursos">
-        <div style={{ textAlign: 'center', marginBottom: '8px' }}>
-          <span className="seccion-pill">📚 Catálogo</span>
-        </div>
         <h2 className="seccion-titulo">Nuestros cursos</h2>
-        <p className="seccion-sub">Encuentra el curso ideal para ti — todos diseñados por expertos</p>
-
         <div className="cursos-grid">
-          {cursos.map((c, i) => (
-            <div className="curso-card" key={i}>
+          {cursos.map((c) => (
+            <div className="curso-card" key={c.id}>
               <span className="curso-emoji">{c.emoji}</span>
               <h3>{c.nombre}</h3>
               <p>{c.desc}</p>
@@ -105,13 +97,18 @@ const Home = () => {
                 <span className="etiqueta">{c.edad}</span>
                 <span className="curso-duracion">⏱ {c.duracion}</span>
               </div>
-              <button className="btn-curso" onClick={handleCTA}>Ver curso →</button>
+              <button 
+                className="btn-curso" 
+                onClick={() => handleEnroll(c.id)}
+                disabled={enrolledCourses.includes(c.id)}
+              >
+                {enrolledCourses.includes(c.id) ? 'Ya inscrito' : 'Inscribirse →'}
+              </button>
             </div>
           ))}
         </div>
       </section>
-
-      {/* ── CÓMO FUNCIONA ── */}
+         {/* ── CÓMO FUNCIONA ── */}
       <section className="como-funciona-section">
         <div style={{ textAlign: 'center', marginBottom: '8px' }}>
           <span className="seccion-pill">🚀 Proceso</span>
@@ -167,22 +164,23 @@ const Home = () => {
           <div className="porque-card">
             <span className="porque-emoji">🎯</span>
             <h4>A tu ritmo</h4>
-            <p>Accede a los contenidos cuando quieras, sin horarios fijos ni presión.</p>
+              <p>Accede a los contenidos cuando quieras, sin horarios fijos ni presión.</p>
           </div>
           <div className="porque-card">
             <span className="porque-emoji">🌍</span>
             <h4>Accesible</h4>
-            <p>Cursos gratuitos y de pago adaptados a todos los bolsillos.</p>
+              <p>Cursos gratuitos y de pago adaptados a todos los bolsillos.</p>
           </div>
           <div className="porque-card">
             <span className="porque-emoji">🏆</span>
             <h4>Certificados</h4>
-            <p>Obtén un certificado validado al completar cada módulo y curso.</p>
+                        <p>Obtén un certificado validado al completar cada módulo y curso.</p>
           </div>
           <div className="porque-card">
             <span className="porque-emoji">👥</span>
             <h4>Comunidad</h4>
-            <p>Aprende junto a miles de estudiantes y docentes comprometidos.</p>
+      
+                  <p>Aprende junto a miles de estudiantes y docentes comprometidos.</p>
           </div>
         </div>
       </section>

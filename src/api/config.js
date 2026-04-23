@@ -10,15 +10,26 @@ export const API_CONFIG = {
 };
 
 // Simulador de respuestas para desarrollo (mock)
-const mockUsers = [
-  {
-    id: '1',
-    name: 'Juan Pérez',
-    email: 'juan@example.com',
-    password: '123456',
-    age: 25,
-  },
-];
+// Cargar usuarios desde localStorage o usar los por defecto
+const getInitialUsers = () => {
+  if (typeof window !== 'undefined' && window.localStorage) {
+    const saved = localStorage.getItem('mockUsers');
+    if (saved) {
+      return JSON.parse(saved);
+    }
+  }
+  return [
+    {
+      id: '1',
+      name: 'Juan Pérez',
+      email: 'juan@example.com',
+      password: '123456',
+      age: 25,
+    },
+  ];
+};
+
+let mockUsers = getInitialUsers();
 
 // Simular petición GET
 const mockGet = (endpoint) => {
@@ -65,6 +76,10 @@ const mockPost = (endpoint, data) => {
         } else {
           const newUser = { ...data, id: String(mockUsers.length + 1) };
           mockUsers.push(newUser);
+          // Guardar usuarios en localStorage
+          if (typeof window !== 'undefined' && window.localStorage) {
+            localStorage.setItem('mockUsers', JSON.stringify(mockUsers));
+          }
           resolve({
             success: true,
             user: { id: newUser.id, name: newUser.name, email: newUser.email, age: newUser.age },

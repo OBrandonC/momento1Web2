@@ -38,9 +38,10 @@ const Navbar = () => {
           
           {isAuthenticated ? (
             <>
+              
               <li>
-                <Link to="/dashboard" onClick={() => setIsMenuOpen(false)}>
-                  Panel Principal
+                <Link to="/my-courses" onClick={() => setIsMenuOpen(false)}>
+                   Mis Cursos
                 </Link>
               </li>
               <li>

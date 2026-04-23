@@ -40,7 +40,7 @@ const Login = () => {
         text: `Hola ${response.user.name}, has iniciado sesión correctamente`,
         confirmButtonColor: '#3085d6',
       }).then(() => {
-        navigate('/dashboard');
+        navigate('/my-courses');
       });
     } catch (error) {
       console.error('Error en login:', error);
