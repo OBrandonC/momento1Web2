@@ -33,7 +33,7 @@ El proyecto busca brindar herramientas de formación accesibles, inclusivas y de
 ## 🌟 Misión y Visión
 
 ### Misión
-> Proporcionar experiencias de aprendizaje complementarias que potencien el desarrollo personal, académico y profesional de cada estudiante, en un ambiente colaborativo y accesible.
+> Proporcionar experiencias de aprendizaje complementarias que potencien el desarrollo personal, académico y profesional de cada estudiante, en un ambiente colaborativo y accesible.grupo
 
 ### Visión
 > Ser la plataforma de referencia en educación complementaria de habla hispana, reconocida por la calidad de sus contenidos, la diversidad de sus cursos y el impacto positivo en sus comunidades.
